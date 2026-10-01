@@ -1,0 +1,82 @@
+# =============================================================================
+# Docker Compose for local development
+# =============================================================================
+# Usage:
+#   docker-compose up -d          # Start all services
+#   docker-compose up -d db       # Start only the database
+#   docker-compose logs -f app    # Follow app logs
+#   docker-compose down -v        # Stop and remove volumes
+# =============================================================================
+
+services:
+  # --- PostgreSQL + TimescaleDB ---
+  db:
+    image: timescale/timescaledb:latest-pg16
+    container_name: macro_quant_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: macro_quant
+      POSTGRES_USER: mquser
+      POSTGRES_PASSWORD: mqpass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mquser -d macro_quant"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- Application service ---
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: macro_quant_app
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      # Override DB URL to use Docker network hostname
+      DATABASE_URL: postgresql+asyncpg://mquser:mqpass@db:5432/macro_quant
+      DATABASE_URL_SYNC: postgresql+psycopg2://mquser:mqpass@db:5432/macro_quant
+    volumes:
+      - ./src:/app/src  # Hot reload for development
+    # Keep container running for development
+    command: ["python", "-c", "import time; time.sleep(99999)"]
+
+  # --- Scheduler service ---
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: macro_quant_scheduler
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://mquser:mqpass@db:5432/macro_quant
+      DATABASE_URL_SYNC: postgresql+psycopg2://mquser:mqpass@db:5432/macro_quant
+    command: ["python", "-m", "src.scheduler.jobs"]
+
+  # --- Run migrations (one-shot) ---
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: macro_quant_migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL_SYNC: postgresql+psycopg2://mquser:mqpass@db:5432/macro_quant
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    # Exit after migration completes
+    restart: "no"
+
+volumes:
+  pgdata:
+    driver: local

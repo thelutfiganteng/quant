@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro Quant Dashboard — Event-Driven Trading Intelligence</title>
+    <meta name="description" content="Real-time macroeconomic data analysis, nowcasting, and event-driven trading signals">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect x="2" y="16" width="5" height="10" rx="1.5" fill="url(#g1)"/>
+                        <rect x="9" y="10" width="5" height="16" rx="1.5" fill="url(#g2)"/>
+                        <rect x="16" y="6" width="5" height="20" rx="1.5" fill="url(#g3)"/>
+                        <rect x="23" y="2" width="5" height="24" rx="1.5" fill="url(#g4)"/>
+                        <defs>
+                            <linearGradient id="g1" x1="4.5" y1="16" x2="4.5" y2="26" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6366f1"/><stop offset="1" stop-color="#818cf8"/>
+                            </linearGradient>
+                            <linearGradient id="g2" x1="11.5" y1="10" x2="11.5" y2="26" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6366f1"/><stop offset="1" stop-color="#a78bfa"/>
+                            </linearGradient>
+                            <linearGradient id="g3" x1="18.5" y1="6" x2="18.5" y2="26" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#818cf8"/><stop offset="1" stop-color="#c4b5fd"/>
+                            </linearGradient>
+                            <linearGradient id="g4" x1="25.5" y1="2" x2="25.5" y2="26" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a78bfa"/><stop offset="1" stop-color="#e0e7ff"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">MacroQuant</span>
+            </div>
+        </div>
+        <ul class="nav-items">
+            <li class="nav-item active" data-page="overview" id="nav-overview">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+                <span>Overview</span>
+            </li>
+            <li class="nav-item" data-page="calendar" id="nav-calendar">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 8H18" stroke="currentColor" stroke-width="1.5"/><path d="M6 2V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>Calendar</span>
+            </li>
+            <li class="nav-item" data-page="nowcast" id="nav-nowcast">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>Nowcast</span>
+            </li>
+            <li class="nav-item" data-page="signals" id="nav-signals">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 15L6 9L10 12L14 5L18 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Signals</span>
+            </li>
+            <li class="nav-item" data-page="backtest" id="nav-backtest">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 17V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 17V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 17V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M15 17V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>Backtest</span>
+            </li>
+            <li class="nav-item" data-page="system" id="nav-system">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 2V4M10 16V18M18 10H16M4 10H2M15.66 4.34L14.24 5.76M5.76 14.24L4.34 15.66M15.66 15.66L14.24 14.24M5.76 5.76L4.34 4.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>System</span>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-badge" id="system-status-badge">
+                <span class="status-dot demo"></span>
+                <span>Demo Mode</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 id="page-title" class="page-title">Overview</h1>
+                <span class="header-subtitle" id="header-subtitle">Macro Economic Intelligence Dashboard</span>
+            </div>
+            <div class="header-right">
+                <div class="last-updated" id="last-updated">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4V7L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                    <span>Updated just now</span>
+                </div>
+                <button class="btn-refresh" id="btn-refresh" title="Refresh data">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 1 1 8 2c1.66 0 3.14.69 4.22 1.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 2V6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page: Overview -->
+        <div id="page-overview" class="page active">
+            <!-- KPI Cards -->
+            <div class="kpi-grid" id="kpi-grid">
+                <!-- Filled by JS -->
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid-2col">
+                <div class="card" id="card-surprise-chart">
+                    <div class="card-header">
+                        <h3>Surprise Index History</h3>
+                        <div class="card-actions">
+                            <button class="chip active" data-indicator="CPI" onclick="switchSurpriseChart('CPI')">CPI</button>
+                            <button class="chip" data-indicator="NFP" onclick="switchSurpriseChart('NFP')">NFP</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="surprise-chart" height="260"></canvas>
+                    </div>
+                </div>
+                <div class="card" id="card-upcoming">
+                    <div class="card-header">
+                        <h3>Upcoming Releases</h3>
+                        <span class="badge">Next 7 days</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="upcoming-list" class="upcoming-list">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Releases Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Releases</h3>
+                    <span class="badge">Last 30 days</span>
+                </div>
+                <div class="card-body table-container">
+                    <table class="data-table" id="releases-table">
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Date</th>
+                                <th>Actual</th>
+                                <th>Consensus</th>
+                                <th>Surprise</th>
+                                <th>Z-Score</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody id="releases-tbody">
+                            <!-- Filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Calendar -->
+        <div id="page-calendar" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Economic Calendar</h3>
+                    <span class="badge">Upcoming Events</span>
+                </div>
+                <div class="card-body table-container">
+                    <table class="data-table" id="calendar-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Event</th>
+                                <th>Importance</th>
+                                <th>Forecast</th>
+                                <th>Previous</th>
+                                <th>Country</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Nowcast -->
+        <div id="page-nowcast" class="page">
+            <div class="kpi-grid" id="nowcast-cards"></div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Nowcast vs Consensus</h3>
+                    <span class="badge">Latest Estimates</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="nowcast-chart" height="320"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Signals -->
+        <div id="page-signals" class="page">
+            <div class="signals-header">
+                <h2>Active Signals</h2>
+                <p>Upcoming macro events</p>
+            </div>
+            <div id="signals-container" class="signals-grid"></div>
+            
+            <div class="signals-header" style="margin-top: 32px;">
+                <h2>Signal History</h2>
+                <p>Executed and expired signals</p>
+            </div>
+            <div id="historical-signals-container" class="signals-grid historical-grid"></div>
+        </div>
+
+        <!-- Page: Backtest -->
+        <div id="page-backtest" class="page">
+            <div class="kpi-grid" id="backtest-kpis"></div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Monthly Returns</h3>
+                    <span class="badge" id="backtest-period"></span>
+                </div>
+                <div class="card-body">
+                    <canvas id="backtest-chart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: System -->
+        <div id="page-system" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h3>System Components</h3>
+                    <span class="badge" id="system-uptime"></span>
+                </div>
+                <div class="card-body">
+                    <div id="system-components" class="system-grid"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>API Credentials Setup</h3>
+                </div>
+                <div class="card-body">
+                    <div class="credentials-guide">
+                        <div class="cred-item">
+                            <div class="cred-header">
+                                <span class="cred-name">FRED API</span>
+                                <span class="badge badge-free">Free</span>
+                            </div>
+                            <p>Historical macro data (CPI, NFP, GDP, etc.)</p>
+                            <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank" class="cred-link">Get API Key →</a>
+                        </div>
+                        <div class="cred-item">
+                            <div class="cred-header">
+                                <span class="cred-name">BLS API</span>
+                                <span class="badge badge-free">Free</span>
+                            </div>
+                            <p>Official CPI & NFP releases from Bureau of Labor Statistics</p>
+                            <a href="https://data.bls.gov/registrationEngine/" target="_blank" class="cred-link">Register →</a>
+                        </div>
+                        <div class="cred-item">
+                            <div class="cred-header">
+                                <span class="cred-name">Polygon.io</span>
+                                <span class="badge badge-freemium">Freemium</span>
+                            </div>
+                            <p>Market price data (OHLCV for SPY, TLT, etc.)</p>
+                            <a href="https://polygon.io/dashboard/signup" target="_blank" class="cred-link">Sign Up →</a>
+                        </div>
+                        <div class="cred-item">
+                            <div class="cred-header">
+                                <span class="cred-name">Trading Economics</span>
+                                <span class="badge badge-freemium">Freemium</span>
+                            </div>
+                            <p>Economic calendar + consensus estimates</p>
+                            <a href="https://tradingeconomics.com/analytics/api.aspx" target="_blank" class="cred-link">Get Access →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="/static/app.js?v=2"></script>
+</body>
+</html>
