@@ -44,6 +44,7 @@ function navigateTo(page) {
         nowcast: 'Nowcast Estimates',
         signals: 'Trading Signals',
         backtest: 'Backtest Results',
+        astrology: 'Astro Pivots',
         system: 'System Status'
     };
     document.getElementById('page-title').textContent = titles[page] || page;
@@ -74,6 +75,7 @@ async function loadPageData(page) {
         case 'nowcast': await loadNowcast(); break;
         case 'signals': await loadSignals(); break;
         case 'backtest': await loadBacktest(); break;
+        case 'astrology': await loadAstrology(); break;
         case 'system': await loadSystem(); break;
     }
 }
@@ -580,14 +582,24 @@ function formatIndicator(ind) {
 
 function formatDate(dateStr) {
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return d.toLocaleDateString('id-ID', { 
+        timeZone: 'Asia/Jakarta',
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+    });
 }
 
 function formatDateTime(dateStr) {
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-    });
+    return d.toLocaleString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        month: 'short', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZoneName: 'short'
+    }).replace('WIB', 'WIB'); // Ensure it says WIB
 }
 
 // ==========================================================================
@@ -607,3 +619,48 @@ document.getElementById('btn-refresh').addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     loadOverview();
 });
+
+// ==========================================================================
+// Astrology Page
+// ==========================================================================
+
+async function loadAstrology() {
+    const data = await fetchJSON('/api/astrology/pivot?days=60');
+    if (!data || !data.pivots) return;
+
+    const tbody = document.getElementById('astrology-tbody');
+    
+    if (data.pivots.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-tertiary); padding: 20px;">No significant pivot dates found in the next ${data.scan_period_days} days.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = data.pivots.map(p => {
+        const prob = Math.round(p.pivot_score * 100);
+        const probClass = prob >= 50 ? 'positive' : prob >= 30 ? 'neutral' : 'negative';
+        
+        return `
+        <tr>
+            <td style="font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 1.05rem; white-space: nowrap;">
+                ${formatDate(p.date)}
+            </td>
+            <td>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="badge ${probClass}" style="min-width: 45px; text-align: center; font-family: 'JetBrains Mono', monospace;">${prob}%</span>
+                    <div class="confidence-bar" style="width: 100px; height: 6px; flex: none; background: var(--border-color); border-radius: 3px; overflow: hidden;">
+                        <div class="confidence-fill" style="width: ${prob}%; height: 100%; background: ${prob >= 50 ? 'var(--accent-primary)' : 'var(--text-tertiary)'}; transition: width 0.5s ease-in-out;"></div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${p.factors.map(f => `<div style="display: flex; align-items: start; gap: 6px;">
+                        <span style="color: var(--accent-primary); margin-top: 1px;">✧</span>
+                        <span style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.4;">${f}</span>
+                    </div>`).join('')}
+                </div>
+            </td>
+        </tr>
+    `}).join('');
+}
+

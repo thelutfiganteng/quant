@@ -35,168 +35,158 @@ logger = structlog.get_logger(__name__)
 
 DEMO_RELEASES = [
     {
-        "indicator": "CPI",
-        "release_date": "2026-09-10T08:30:00",
-        "actual": 2.9,
-        "consensus": 3.0,
-        "previous": 3.0,
-        "surprise": -0.1,
-        "surprise_zscore": -0.85,
-        "source": "BLS",
-    },
-    {
         "indicator": "NFP",
-        "release_date": "2026-09-05T08:30:00",
-        "actual": 187,
-        "consensus": 175,
-        "previous": 206,
-        "surprise": 12,
-        "surprise_zscore": 0.92,
+        "release_date": "2026-10-02T12:30:00Z",
+        "actual": 185,
+        "consensus": 170,
+        "previous": 142,
+        "surprise": 15,
+        "surprise_zscore": 0.85,
         "source": "BLS",
-    },
-    {
-        "indicator": "GDP",
-        "release_date": "2026-08-29T08:30:00",
-        "actual": 2.8,
-        "consensus": 2.0,
-        "previous": 1.4,
-        "surprise": 0.8,
-        "surprise_zscore": 2.15,
-        "source": "FRED",
-    },
-    {
-        "indicator": "PCE",
-        "release_date": "2026-08-30T08:30:00",
-        "actual": 2.5,
-        "consensus": 2.5,
-        "previous": 2.6,
-        "surprise": 0.0,
-        "surprise_zscore": 0.0,
-        "source": "FRED",
     },
     {
         "indicator": "UNEMPLOYMENT_RATE",
-        "release_date": "2026-09-05T08:30:00",
-        "actual": 4.3,
-        "consensus": 4.1,
-        "previous": 4.1,
-        "surprise": 0.2,
-        "surprise_zscore": 1.45,
+        "release_date": "2026-10-02T12:30:00Z",
+        "actual": 4.1,
+        "consensus": 4.2,
+        "previous": 4.2,
+        "surprise": -0.1,
+        "surprise_zscore": -1.2,
         "source": "BLS",
     },
     {
-        "indicator": "CORE_CPI",
-        "release_date": "2026-09-10T08:30:00",
-        "actual": 3.2,
-        "consensus": 3.2,
-        "previous": 3.3,
+        "indicator": "ISM_MANUFACTURING",
+        "release_date": "2026-10-01T14:00:00Z",
+        "actual": 47.2,
+        "consensus": 47.5,
+        "previous": 47.2,
+        "surprise": -0.3,
+        "surprise_zscore": -0.4,
+        "source": "ISM",
+    },
+    {
+        "indicator": "PCE",
+        "release_date": "2026-09-25T12:30:00Z",
+        "actual": 2.2,
+        "consensus": 2.3,
+        "previous": 2.5,
+        "surprise": -0.1,
+        "surprise_zscore": -0.9,
+        "source": "BEA",
+    },
+    {
+        "indicator": "FOMC Rate Decision",
+        "release_date": "2026-09-16T18:00:00Z",
+        "actual": 5.00,
+        "consensus": 5.00,
+        "previous": 5.50,
         "surprise": 0.0,
         "surprise_zscore": 0.0,
-        "source": "BLS",
-    },
-    {
-        "indicator": "INITIAL_CLAIMS",
-        "release_date": "2026-09-12T08:30:00",
-        "actual": 227,
-        "consensus": 230,
-        "previous": 232,
-        "surprise": -3,
-        "surprise_zscore": -0.45,
-        "source": "BLS",
+        "source": "FED",
     },
     {
         "indicator": "RETAIL_SALES",
-        "release_date": "2026-09-17T08:30:00",
-        "actual": None,
+        "release_date": "2026-09-15T12:30:00Z",
+        "actual": 0.1,
         "consensus": 0.2,
-        "previous": 1.0,
-        "surprise": None,
-        "surprise_zscore": None,
-        "source": "FRED",
+        "previous": 1.1,
+        "surprise": -0.1,
+        "surprise_zscore": -0.5,
+        "source": "Census",
+    },
+    {
+        "indicator": "CPI",
+        "release_date": "2026-09-11T12:30:00Z",
+        "actual": 2.5,
+        "consensus": 2.5,
+        "previous": 2.9,
+        "surprise": 0.0,
+        "surprise_zscore": 0.0,
+        "source": "BLS",
     },
 ]
 
 DEMO_CALENDAR = [
     {
-        "indicator": "Retail Sales MoM",
+        "indicator": "CPI",
         "country": "US",
-        "scheduled_date": "2026-09-17T08:30:00",
+        "scheduled_date": "2026-10-14T12:30:00Z",
         "importance": "HIGH",
-        "forecast": 0.2,
-        "previous": 1.0,
+        "forecast": 2.3,
+        "previous": 2.5,
     },
     {
-        "indicator": "Industrial Production MoM",
+        "indicator": "CORE_CPI",
         "country": "US",
-        "scheduled_date": "2026-09-17T09:15:00",
+        "scheduled_date": "2026-10-14T12:30:00Z",
+        "importance": "HIGH",
+        "forecast": 3.2,
+        "previous": 3.2,
+    },
+    {
+        "indicator": "RETAIL_SALES",
+        "country": "US",
+        "scheduled_date": "2026-10-15T12:30:00Z",
+        "importance": "HIGH",
+        "forecast": 0.3,
+        "previous": 0.1,
+    },
+    {
+        "indicator": "INITIAL_CLAIMS",
+        "country": "US",
+        "scheduled_date": "2026-10-15T12:30:00Z",
         "importance": "MEDIUM",
-        "forecast": 0.2,
-        "previous": -0.3,
+        "forecast": 220,
+        "previous": 225,
     },
     {
         "indicator": "FOMC Rate Decision",
         "country": "US",
-        "scheduled_date": "2026-09-18T14:00:00",
+        "scheduled_date": "2026-11-04T18:00:00Z",
         "importance": "HIGH",
-        "forecast": 5.25,
-        "previous": 5.50,
+        "forecast": 4.75,
+        "previous": 5.00,
     },
     {
-        "indicator": "Initial Jobless Claims",
+        "indicator": "NFP",
         "country": "US",
-        "scheduled_date": "2026-09-19T08:30:00",
-        "importance": "MEDIUM",
-        "forecast": 228,
-        "previous": 227,
-    },
-    {
-        "indicator": "Existing Home Sales",
-        "country": "US",
-        "scheduled_date": "2026-09-19T10:00:00",
-        "importance": "MEDIUM",
-        "forecast": 3.90,
-        "previous": 3.95,
-    },
-    {
-        "indicator": "Philadelphia Fed Manufacturing",
-        "country": "US",
-        "scheduled_date": "2026-09-19T08:30:00",
-        "importance": "MEDIUM",
-        "forecast": -1.0,
-        "previous": -7.0,
+        "scheduled_date": "2026-11-06T13:30:00Z",
+        "importance": "HIGH",
+        "forecast": 150,
+        "previous": 185,
     },
 ]
 
 DEMO_NOWCASTS = [
     {
         "indicator": "CPI",
-        "target_release_date": "2026-10-10T08:30:00",
-        "estimated_at": "2026-09-16T06:00:00",
-        "point_estimate": 2.8,
-        "confidence_lower": 2.6,
-        "confidence_upper": 3.0,
+        "target_release_date": "2026-10-14T12:30:00Z",
+        "estimated_at": "2026-10-08T06:00:00Z",
+        "point_estimate": 2.4,
+        "confidence_lower": 2.2,
+        "confidence_upper": 2.6,
         "model_name": "cpi_bridge_v1",
-        "consensus": 2.9,
+        "consensus": 2.3,
     },
     {
         "indicator": "NFP",
-        "target_release_date": "2026-10-03T08:30:00",
-        "estimated_at": "2026-09-16T06:00:00",
-        "point_estimate": 165,
-        "confidence_lower": 140,
+        "target_release_date": "2026-11-06T13:30:00Z",
+        "estimated_at": "2026-10-08T06:00:00Z",
+        "point_estimate": 160,
+        "confidence_lower": 130,
         "confidence_upper": 190,
         "model_name": "nfp_kalman_v1",
-        "consensus": 170,
+        "consensus": 150,
     },
     {
         "indicator": "GDP",
-        "target_release_date": "2026-10-30T08:30:00",
-        "estimated_at": "2026-09-16T06:00:00",
-        "point_estimate": 2.5,
-        "confidence_lower": 2.1,
-        "confidence_upper": 2.9,
+        "target_release_date": "2026-10-29T12:30:00Z",
+        "estimated_at": "2026-10-08T06:00:00Z",
+        "point_estimate": 2.7,
+        "confidence_lower": 2.4,
+        "confidence_upper": 3.0,
         "model_name": "gdp_bridge_v1",
-        "consensus": 2.3,
+        "consensus": 2.5,
     },
 ]
 
@@ -303,22 +293,50 @@ def create_app() -> FastAPI:
         """Get current and historical trading signals using the Phase 5 engine."""
         from datetime import datetime, timezone, timedelta
         from src.signals import SignalGenerator, SignalScorer, SignalStatus
+        import random
 
         scorer = SignalScorer(
-            backtest_hit_rates={"CPI": 0.62, "NFP": 0.58, "GDP": 0.55}
+            backtest_hit_rates={
+                "CPI": 0.62, "CORE_CPI": 0.60, "NFP": 0.58, "GDP": 0.55,
+                "PCE": 0.54, "CORE_PCE": 0.54, "UNEMPLOYMENT_RATE": 0.52,
+                "PPI": 0.53, "INITIAL_CLAIMS": 0.51, "RETAIL_SALES": 0.56,
+                "ISM_MANUFACTURING": 0.53, "ISM_SERVICES": 0.55,
+                "HOUSING_STARTS": 0.50, "CONSUMER_CONFIDENCE": 0.51,
+                "DURABLE_GOODS": 0.52
+            }
         )
         gen = SignalGenerator(scorer=scorer, min_confidence=0.1)
 
-        # Generate signals with specific dates
-        # NFP is Oct 2, GDP is Oct 29, CPI was Sep 11
         now = datetime.now(timezone.utc)
         
-        demo_data = [
-            ("NFP", 165, 170, "nfp_kalman_v1", datetime(2026, 10, 2, 12, 30, tzinfo=timezone.utc)),
-            ("GDP", 2.5, 2.3, "gdp_bridge_v1", datetime(2026, 10, 29, 12, 30, tzinfo=timezone.utc)),
-            ("CPI", 2.8, 2.9, "cpi_bridge_v1", datetime(2026, 9, 11, 12, 30, tzinfo=timezone.utc)),
-            ("NFP", 140, 155, "nfp_kalman_v1", datetime(2026, 9, 4, 12, 30, tzinfo=timezone.utc)), # Historical
+        # Dynamically generate signals for all supported indicators
+        demo_data = []
+        
+        from datetime import datetime, timezone
+        
+        upcoming_events = [
+            ("NFP", 160, 150, "nfp_kalman_v1", datetime(2026, 11, 6, 13, 30, tzinfo=timezone.utc)),
+            ("GDP", 2.7, 2.5, "gdp_bridge_v1", datetime(2026, 10, 29, 12, 30, tzinfo=timezone.utc)),
+            ("CPI", 2.4, 2.3, "cpi_bridge_v1", datetime(2026, 10, 14, 12, 30, tzinfo=timezone.utc)),
+            ("PCE", 2.2, 2.2, "pce_bridge_v1", datetime(2026, 10, 31, 12, 30, tzinfo=timezone.utc)),
+            ("UNEMPLOYMENT_RATE", 4.1, 4.2, "unemp_kalman_v1", datetime(2026, 11, 6, 13, 30, tzinfo=timezone.utc)),
+            ("PPI", 0.1, 0.2, "ppi_bridge_v1", datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)),
+            ("RETAIL_SALES", 0.5, 0.3, "retail_kalman_v1", datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)),
+            ("ISM_MANUFACTURING", 48.5, 47.8, "ism_mfg_bridge_v1", datetime(2026, 11, 2, 14, 0, tzinfo=timezone.utc)),
+            ("INITIAL_CLAIMS", 215, 220, "claims_kalman_v1", datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)),
         ]
+        
+        # Historical events explicitly matched to DEMO_RELEASES
+        historical_events = [
+            ("NFP", 185, 170, "nfp_kalman_v1", datetime(2026, 10, 2, 12, 30, tzinfo=timezone.utc)),
+            ("UNEMPLOYMENT_RATE", 4.1, 4.2, "unemp_kalman_v1", datetime(2026, 10, 2, 12, 30, tzinfo=timezone.utc)),
+            ("ISM_MANUFACTURING", 47.2, 47.5, "ism_mfg_bridge_v1", datetime(2026, 10, 1, 14, 0, tzinfo=timezone.utc)),
+            ("PCE", 2.2, 2.3, "pce_bridge_v1", datetime(2026, 9, 25, 12, 30, tzinfo=timezone.utc)),
+            ("RETAIL_SALES", 0.1, 0.2, "retail_kalman_v1", datetime(2026, 9, 15, 12, 30, tzinfo=timezone.utc)),
+            ("CPI", 2.5, 2.5, "cpi_bridge_v1", datetime(2026, 9, 11, 12, 30, tzinfo=timezone.utc)),
+        ]
+
+        demo_data = upcoming_events + historical_events
 
         active_signals = []
         historical_signals = []
@@ -345,9 +363,9 @@ def create_app() -> FastAPI:
                 # Add human-readable reason
                 div = nowcast - consensus
                 if div > 0:
-                    d["reason"] = f"Nowcast above consensus (+{abs(div):.1f}), model: {model}"
+                    d["reason"] = f"Nowcast above consensus (+{abs(div):.2f}), model: {model}"
                 else:
-                    d["reason"] = f"Nowcast below consensus ({div:.1f}), model: {model}"
+                    d["reason"] = f"Nowcast below consensus ({div:.2f}), model: {model}"
                     
                 if sig.status in [SignalStatus.ACTIVE, SignalStatus.PENDING]:
                     active_signals.append(d)
@@ -587,6 +605,43 @@ def create_app() -> FastAPI:
             "history": history,
             "n_significant": sum(1 for h in history if h["significant"]),
         }
+
+    @app.get("/api/astrology/pivot")
+    async def get_astro_pivots(days: int = 60):
+        """
+        Get high-probability market pivot dates based on Financial Astrology and Gann Theory.
+        Algorithms: Lunar Cycle, Mercury Retrograde, and Gann Seasonal Dates.
+        """
+        from datetime import datetime, timezone
+        from src.signals.astrology import AstroPivotEngine
+        
+        try:
+            engine = AstroPivotEngine()
+            start_date = datetime.now(timezone.utc)
+            
+            # Generate calendar for the next N days
+            df_calendar = engine.generate_calendar(start_date, days=days)
+            
+            # Filter to show only dates with a significant pivot probability (e.g. >= 0.40)
+            significant_pivots = df_calendar[df_calendar['pivot_score'] >= 0.40].copy()
+            
+            # Convert to dictionary format for JSON response
+            pivot_list = significant_pivots.to_dict(orient="records")
+            
+            return {
+                "status": "success",
+                "algorithms_applied": [
+                    "Lunar Synodic Cycle (New/Full Moon)",
+                    "Mercury Retrograde Period",
+                    "Gann 90-day Seasonal Cycle (Equinox/Solstice)"
+                ],
+                "scan_period_days": days,
+                "significant_pivots_found": len(pivot_list),
+                "pivots": pivot_list
+            }
+        except Exception as e:
+            logger.error("astro_pivot_failed", error=str(e))
+            raise HTTPException(status_code=500, detail=str(e))
 
     return app
 

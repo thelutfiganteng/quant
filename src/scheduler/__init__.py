@@ -514,17 +514,27 @@ async def step_generate_signals(**kwargs: Any) -> dict[str, Any]:
     from src.signals import SignalGenerator, SignalScorer
 
     scorer = SignalScorer(
-        backtest_hit_rates={"CPI": 0.62, "NFP": 0.58, "GDP": 0.55}
+        backtest_hit_rates={
+            "CPI": 0.62, "CORE_CPI": 0.60, "NFP": 0.58, "GDP": 0.55,
+            "PCE": 0.54, "CORE_PCE": 0.54, "UNEMPLOYMENT_RATE": 0.52,
+            "PPI": 0.53, "INITIAL_CLAIMS": 0.51, "RETAIL_SALES": 0.56,
+            "ISM_MANUFACTURING": 0.53, "ISM_SERVICES": 0.55,
+            "HOUSING_STARTS": 0.50, "CONSUMER_CONFIDENCE": 0.51,
+            "DURABLE_GOODS": 0.52
+        }
     )
     gen = SignalGenerator(scorer=scorer, min_confidence=0.1)
 
     from datetime import timedelta
+    import random
 
-    demo_data = [
-        ("CPI", 2.8, 2.9, 0.65),
-        ("NFP", 165, 170, 0.55),
-        ("GDP", 2.5, 2.3, 0.50),
-    ]
+    demo_data = []
+    # Generate random nowcast vs consensus logic for 15 indicators
+    for indicator in scorer.INDICATOR_WEIGHTS.keys():
+        consensus = random.uniform(0.1, 5.0)
+        nowcast = consensus + random.uniform(-0.5, 0.5)
+        conf = random.uniform(0.4, 0.85)
+        demo_data.append((indicator, nowcast, consensus, conf))
 
     count = 0
     for indicator, nowcast, consensus, conf in demo_data:

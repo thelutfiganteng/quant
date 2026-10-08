@@ -186,6 +186,7 @@ class SignalScorer:
         "HOUSING_STARTS": 0.40,
         "CONSUMER_CONFIDENCE": 0.55,
         "DURABLE_GOODS": 0.50,
+        "FOMC": 1.0,
     }
 
     def __init__(
@@ -496,6 +497,91 @@ class SignalGenerator:
             indicator=indicator,
             direction=direction.value,
             zscore=surprise_zscore,
+        )
+
+        return signal
+
+    def generate_fomc_signal(
+        self,
+        actual_rate: float,
+        consensus_rate: float,
+        recent_cpi_surprise: float,
+        event_time: datetime,
+        asset: str = "SPY",
+    ) -> Signal | None:
+        """
+        Generate a trading signal for FOMC Rate Decisions.
+        
+        Algorithm:
+        1. Rate Shock: Divergence between Actual and Consensus.
+        2. Statement Tone Proxy: When rates match consensus, uses recent CPI surprise 
+           to anticipate hawkish/dovish forward guidance.
+        """
+        indicator = "FOMC"
+        
+        # Rate difference in basis points (1% = 100 bps)
+        rate_diff_bps = (actual_rate - consensus_rate) * 100
+        
+        # Hawkish score
+        # Positive = Hawkish (Bearish for equities), Negative = Dovish (Bullish for equities)
+        hawkish_score = rate_diff_bps
+        
+        # If the rate was exactly as expected, the market reacts to the press conference/statement.
+        # We proxy the Fed's tone using recent inflation data (CPI surprise).
+        if abs(rate_diff_bps) < 1.0:
+            hawkish_score = recent_cpi_surprise * 10.0  # 1 sigma CPI surprise = 10 bps equivalent
+            
+        if abs(hawkish_score) < 2.0:
+            return None # Neutral, no clear signal
+            
+        direction = SignalDirection.SHORT if hawkish_score > 0 else SignalDirection.LONG
+        
+        # Confidence scales with the magnitude of the shock/proxy
+        confidence = min(0.4 + (abs(hawkish_score) / 50.0) * 0.5, 0.95)
+        
+        if confidence < self.min_confidence:
+            return None
+            
+        now = datetime.now(timezone.utc)
+        from datetime import timedelta
+        
+        reason = "Hawkish rate hike/shock" if rate_diff_bps > 0 else "Dovish rate cut" if rate_diff_bps < 0 else f"Expected rate, but {'Hawkish' if hawkish_score > 0 else 'Dovish'} tone anticipated via CPI proxy."
+        
+        signal = Signal(
+            signal_id=self._generate_id(indicator, event_time, suffix="fomc"),
+            indicator=indicator,
+            direction=direction,
+            asset=asset,
+            confidence=round(confidence, 4),
+            source=SignalSource.COMPOSITE,
+            status=SignalStatus.ACTIVE if event_time <= now else SignalStatus.PENDING,
+            generated_at=now,
+            valid_from=now,
+            valid_until=event_time + timedelta(hours=4),
+            event_time=event_time,
+            suggested_size_pct=self._compute_position_size(confidence),
+            actual=actual_rate,
+            consensus=consensus_rate,
+            surprise_zscore=round(hawkish_score / 10.0, 4), # pseudo z-score
+            strategy_name="fomc_shock_and_tone",
+            stop_loss_pct=self.default_stop_loss_pct,
+            take_profit_pct=self.default_take_profit_pct,
+            metadata={
+                "rate_diff_bps": round(rate_diff_bps, 2),
+                "cpi_proxy_effect": round(recent_cpi_surprise, 4),
+                "hawkish_score": round(hawkish_score, 2),
+                "reason": reason
+            },
+        )
+
+        self._signal_log.append(signal)
+
+        logger.info(
+            "fomc_signal_generated",
+            signal_id=signal.signal_id,
+            direction=direction.value,
+            confidence=confidence,
+            hawkish_score=hawkish_score
         )
 
         return signal
